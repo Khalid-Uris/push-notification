@@ -12,6 +12,8 @@
     <link rel="preconnect" href="https://fonts.bunny.net">
     <link href="https://fonts.bunny.net/css?family=figtree:400,500,600&display=swap" rel="stylesheet" />
 
+
+
     <!-- Scripts -->
     @vite(['resources/css/app.css', 'resources/js/app.js'])
 </head>
@@ -35,6 +37,26 @@
             @yield('content')
         </main>
     </div>
+
+    <script>
+        const toggleButton = document.getElementById('notificationToggle');
+        const dropdown = document.getElementById('notificationDropdown');
+
+        // Toggle dropdown visibility
+        toggleButton.addEventListener('click', function(event) {
+            event.stopPropagation(); // prevent bubbling
+            dropdown.classList.toggle('hidden');
+        });
+
+        // Close dropdown if clicking outside
+        document.addEventListener('click', function(event) {
+            if (!dropdown.classList.contains('hidden') && !dropdown.contains(event.target) && event.target !==
+                toggleButton) {
+                dropdown.classList.add('hidden');
+            }
+        });
+    </script>
+
 </body>
 
 </html>

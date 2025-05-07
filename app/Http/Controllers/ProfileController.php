@@ -25,6 +25,7 @@ class ProfileController extends Controller
         $title = $request->title;
         $body = $request->body;
         $user = User::find(1); // or authenticated user
+        // return $user;
         $firebase->sendNotification($user->fcm_token, $title, $body);
         return response()->json(['sent' => true]);
     }

@@ -10,6 +10,7 @@ firebase.initializeApp({
     storageBucket: "crm-staffshaw.appspot.com",
     messagingSenderId: "612678404336",
     appId: "1:612678404336:web:a0384e3b8b1a0418245a35",
+    measurementId: "G-6RBE6R49CD",
 });
 
 const messaging = firebase.messaging();
