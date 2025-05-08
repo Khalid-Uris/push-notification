@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Requests\ProfileUpdateRequest;
+use App\Models\Notification;
 use App\Models\User;
 use App\Services\FirebaseService;
 use Illuminate\Http\RedirectResponse;
@@ -24,9 +25,25 @@ class ProfileController extends Controller
     {
         $title = $request->title;
         $body = $request->body;
-        $user = User::find(1); // or authenticated user
+        $user = User::find(2); // or authenticated user
+        // $firebaseToken = User::whereNotNull('fcm_token')->pluck('fcm_token')->all();
+
+
+        Notification::create([
+            'title' => $title,
+            'body' => $body,
+            'user_id' => $user->id,
+            'status' => 1
+        ]);
+
+        // return $user->fcm_token;
         // return $user;
         $firebase->sendNotification($user->fcm_token, $title, $body);
+
+        // return $response;
+
+        // return $firebase->test();
+
         return response()->json(['sent' => true]);
     }
     /**

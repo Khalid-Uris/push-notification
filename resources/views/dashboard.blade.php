@@ -5,57 +5,44 @@
         <h1>Welcome, {{ Auth::user()->name }}</h1>
     </div> --}}
 
-    <div class="container">
+    <div class="container mx-auto px-4">
 
-        <div class="row justify-content-center">
+        <div class="flex justify-center">
 
-            <div class="col-md-8">
+            <div class="w-full max-w-2xl mt-6">
 
-                {{-- <center>
+                <div class="bg-white shadow-md rounded-lg">
 
-                    <button id="btn-nft-enable" onclick="initFirebaseMessagingRegistration()"
-                        class="btn btn-danger btn-xs btn-flat">Allow for Notification</button>
+                    <div class="px-6 py-4 border-b border-gray-200 text-xl font-semibold">
+                        {{ __('Dashboard') }}
+                    </div>
 
-                </center> --}}
-
-                <div class="card">
-
-                    <div class="card-header">{{ __('Dashboard') }}</div>
-
-
-
-                    <div class="card-body">
-
-                        @if (session('status'))
-                            <div class="alert alert-success" role="alert">
-
-                                {{ session('status') }}
-
-                            </div>
-                        @endif
-
-
+                    <div class="p-6">
 
                         <form id="notification-form">
                             @csrf
-                            <div class="form-group">
-                                <label>Title</label>
-                                <input type="text" class="form-control" name="title" required>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-medium mb-2">Title</label>
+                                <input type="text"
+                                    class="form-control w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                                    name="title" required>
                             </div>
 
-                            <div class="form-group">
-                                <label>Body</label>
-                                <textarea class="form-control" name="body" required></textarea>
+                            <div class="mb-4">
+                                <label class="block text-gray-700 font-medium mb-2">Body</label>
+                                <textarea
+                                    class="form-control w-full border border-gray-300 rounded px-3 py-2 focus:outline-none focus:ring focus:border-blue-300"
+                                    name="body" required></textarea>
                             </div>
 
-                            <button type="submit" class="btn btn-primary">Send Notification</button>
+                            <x-primary-button class="ms-4">
+                                {{ __('Register') }}
+                            </x-primary-button>
                         </form>
 
-                        <div id="success-message" class="mt-2 text-success" style="display:none;">
+                        <div id="success-message" class="mt-4 text-green-600 hidden">
                             ✅ Notification Sent!
                         </div>
-
-
 
                     </div>
 
@@ -66,6 +53,7 @@
         </div>
 
     </div>
+
 
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-messaging.js"></script>
@@ -176,24 +164,35 @@
             const noteTitle = payload.notification.title;
             const noteOptions = {
                 body: payload.notification.body,
-                //icon: payload.notification.icon || '/logo.png' // fallback icon
+                icon: payload.notification.icon || '/logo.png' // fallback icon
             };
 
             // Show browser notification
             // alert("Will try to show notification now.");
-            console.log(noteTitle);
-            console.log(noteOptions.body);
-            new Notification(noteTitle, noteOptions.body);
+            // console.log(noteTitle);
+            // console.log(noteOptions.body);
+            // new Notification(noteTitle, noteOptions.body);
             // console.log("Notification Permission ", Notification.permission);
 
+            // if (Notification.permission === "granted") {
+            //     new Notification(noteTitle, noteOptions);
+            // } else if (Notification.permission !== "denied") {
+            //     Notification.requestPermission().then(permission => {
+            //         if (permission === "granted") {
+            //             new Notification(noteTitle, noteOptions);
+            //         }
+            //     });
+            // }
 
-            // Notification.requestPermission().then(function(permission) {
-            //     if (permission === "granted") {
-            //         new Notification(noteTitle, noteOptions);
-            //     } else {
-            //         console.warn("Notification permission not granted.");
-            //     }
-            // });
+
+
+            Notification.requestPermission().then(function(permission) {
+                if (permission === "granted") {
+                    new Notification(noteTitle, noteOptions);
+                } else {
+                    console.warn("Notification permission not granted.");
+                }
+            });
         });
     </script>
 
@@ -202,6 +201,7 @@
         document.getElementById('notification-form').addEventListener('submit', function(e) {
             e.preventDefault();
 
+            const form = this;
             let title = this.title.value;
             let body = this.body.value;
 
@@ -220,12 +220,15 @@
                 .then(data => {
                     if (data.sent) {
                         document.getElementById('success-message').style.display = 'block';
+                        form.reset();
 
                         // Optional: show browser notification instantly
                         new Notification(title, {
                             body: body,
-                            //icon: '/logo.png' // use a valid icon if you want
+                            icon: '/logo.png' // use a valid icon if you want
                         });
+
+
                     }
                 })
                 .catch(err => {

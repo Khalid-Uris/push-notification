@@ -16,6 +16,11 @@ class FirebaseService
         $this->messaging = $factory->createMessaging();
     }
 
+    // public function test()
+    // {
+    //     return $this->messaging;
+    // }
+
     public function sendNotification($token, $title, $body)
     {
         $message = [
@@ -25,6 +30,8 @@ class FirebaseService
                 'body' => $body,
             ],
         ];
+
+        // return $this->messaging;
 
         return $this->messaging->send($message);
     }

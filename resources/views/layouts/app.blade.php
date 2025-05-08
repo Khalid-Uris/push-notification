@@ -38,9 +38,11 @@
         </main>
     </div>
 
-    <script>
+    {{-- <script>
         const toggleButton = document.getElementById('notificationToggle');
         const dropdown = document.getElementById('notificationDropdown');
+        const markAllReadBtn = document.getElementById('markAllReadBtn');
+        const notificationList = document.getElementById('notificationList');
 
         // Toggle dropdown visibility
         toggleButton.addEventListener('click', function(event) {
@@ -50,13 +52,34 @@
 
         // Close dropdown if clicking outside
         document.addEventListener('click', function(event) {
-            if (!dropdown.classList.contains('hidden') && !dropdown.contains(event.target) && event.target !==
-                toggleButton) {
+            if (!dropdown.classList.contains('hidden') &&
+                !dropdown.contains(event.target) &&
+                event.target !== toggleButton) {
                 dropdown.classList.add('hidden');
             }
         });
-    </script>
 
+        // Handle "Mark all as read"
+        markAllReadBtn.addEventListener('click', function() {
+            notificationList.innerHTML = `
+                <li class="px-4 py-2 text-gray-500 text-sm text-center">All notifications are read.</li>
+            `;
+            // Optional: AJAX call to mark all as read in database
+            // fetch('/notifications/mark-read', { method: 'POST', headers: { 'X-CSRF-TOKEN': '...' } });
+        });
+    </script> --}}
+    <script src="https://unpkg.com/alpinejs" defer></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+
+    <script>
+        // Lucide Icons init
+        lucide.createIcons();
+
+        // Toggle dropdown
+        document.getElementById('toggleNotifications').addEventListener('click', function() {
+            document.getElementById('notificationDropdown').classList.toggle('hidden');
+        });
+    </script>
 </body>
 
 </html>
